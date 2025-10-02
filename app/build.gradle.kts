@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.android)
@@ -16,22 +18,30 @@ android {
     versionName = "1.0"
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     val supabaseUrl = "https://uppdkjfjxtjnukftgwhz.supabase.co"
-    val supabaseAnonKey = (project.findProperty("SUPABASE_ANON_KEY") as String?)
-      ?: System.getenv("SUPABASE_ANON_KEY")
-      ?: ""
+    val supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwcGRramZqeHRqbnVrZnRnd2h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3MDE3NjMsImV4cCI6MjA2MzI3Nzc2M30._bPFFm4NqghiVPmytaGkiD40QFc1Ct-oIQx1gOK0g74"
     val supabaseBucket = (project.findProperty("SUPABASE_BUCKET") as String?) ?: "public"
     val n8nWebhookUrl = "https://guillesilva04business.app.n8n.cloud/webhook/1"
+    val inviteApiBase = (project.findProperty("INVITE_API_BASE") as String?) ?: "https://uppdkjfjxtjnukftgwhz.supabase.co/functions/v1"
+    val dniResolverUrl = (project.findProperty("DNI_RESOLVER_URL") as String?) ?: ""
+    val passwordResetRedirect = (project.findProperty("PASSWORD_RESET_REDIRECT") as String?) ?: "https://reporteya-reset.vercel.app/"
 
     buildConfigField("String", "SUPABASE_URL", '"' + supabaseUrl + '"')
     buildConfigField("String", "SUPABASE_ANON_KEY", '"' + supabaseAnonKey + '"')
     buildConfigField("String", "SUPABASE_BUCKET", '"' + supabaseBucket + '"')
     buildConfigField("String", "N8N_WEBHOOK_URL", '"' + n8nWebhookUrl + '"')
+    buildConfigField("String", "INVITE_API_BASE", '"' + inviteApiBase + '"')
+    buildConfigField("String", "DNI_RESOLVER_URL", '"' + dniResolverUrl + '"')
+    buildConfigField("String", "PASSWORD_RESET_REDIRECT", '"' + passwordResetRedirect + '"')
   }
 
   buildTypes {
+    debug {
+      buildConfigField("String","INVITE_API_BASE","\"https://uppdkjfjxtjnukftgwhz.supabase.co/functions/v1\"")
+    }
     release {
       isMinifyEnabled = false
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+      buildConfigField("String","INVITE_API_BASE","\"https://uppdkjfjxtjnukftgwhz.supabase.co/functions/v1\"")
     }
   }
 
@@ -64,6 +74,7 @@ dependencies {
   implementation(libs.androidx.lifecycle.viewmodel.compose)
   implementation(libs.androidx.navigation.compose)
   implementation(libs.coil.compose)
+  implementation(libs.androidx.security.crypto)
 
   debugImplementation(libs.androidx.ui.tooling)
   androidTestImplementation(platform(libs.androidx.compose.bom))
